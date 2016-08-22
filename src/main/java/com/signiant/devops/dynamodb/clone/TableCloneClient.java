@@ -65,18 +65,22 @@ public class TableCloneClient {
   */
   public void cloneTable(Long writeCapacity){
     TableDescription sourceDescription = sourceClient.describeTable(tableName).getTable();
-
-    CreateTableRequest replica = TableCloneUtils.constructCreateTableRequest(sourceDescription, writeCapacity);
-
+    CreateTableRequest replica;
+    if(writeCapacity == null){
+      replica = TableCloneUtils.constructCreateTableRequest(sourceDescription);
+    }else{
+      replica = TableCloneUtils.constructCreateTableRequest(sourceDescription, writeCapacity);
+    }
     LOGGER.info("Creating replica table " + tableName + ".");
     replicaClient.createTable(replica);
-    LOGGER.info("Replica table "+ tableName + " created.");
 
     try{
       TableUtils.waitUntilActive(replicaClient, tableName, WAITING_TIMEOUT, WAITING_INTERVAL);
     }catch(InterruptedException e){
       LOGGER.warn("Thread was interrupted while polling status of table: " + tableName);
     }
+
+    LOGGER.info("Replica table "+ tableName + " created.");
   }
 
   /**

@@ -29,8 +29,8 @@ public class CommandLineArgs{
   }
 
   public static final String WRITE_CAPACITY = "--writeCapacity";
-  @Parameter(names = WRITE_CAPACITY, description = "ARGUMENT - Replica write capacity units", required=false )
-  private Long writeCapacity = 500L;
+  @Parameter(names = WRITE_CAPACITY, description = "ARGUMENT - Replica write capacity units (Used for spiking throughput during copies)", required=false )
+  private Long writeCapacity;
 
   public Long getWriteCapacity(){
     return writeCapacity;
